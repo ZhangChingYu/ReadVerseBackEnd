@@ -5,11 +5,11 @@
 我們在創建一個 Spring Boot 項目時有一個步驟是勾選需要的 dependencies，這些 dependencies (ex. Spring Web, Lombok, Spring Data JPA 等等)在項目創建後便會在 build.gradle 這個文件中的 Dependencies 部分展現。
 
 當我們需要拓展項目依賴時，比如發現需要將 Object 類型的數據轉換成 Json 格式，我們知道可以通過添加 Gson 的 dependency 來調用函數進行轉換，可以上網查詢 dependency 的格式:
-~~~ json
+~~~ 
 implementation group: 'com.google.code.gson', name: 'gson', version: '2.7'
 ~~~ 
 然後將其添加到 build.gradle 即可：
-~~~ json
+~~~ 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -43,7 +43,7 @@ server.port=8080
 這裡主要是對應數據庫存放的 Table 結構，以 Customer 為例：
 ~~~ sql
 Create Table customer (
-    customer_id int primary key,
+    customer_id bigint primary key,
     password varchar(225) not null,
     email varchar(225) not null unique
 );
