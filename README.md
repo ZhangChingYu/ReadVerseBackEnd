@@ -88,7 +88,108 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 ~~~
 首先要注意，在 repositories 目錄下只能放 interface，並且一定要加上 **@Repository** 的 Annotation 否則後續運行上會報錯。可以看到我們通過 extend 來使用 Spring Data JPA 的接口，其中 JpaRepository<Customer, Long> 中 Customer 是 model 中對應 Table 的 class，而 Long 則是主鍵的數據類型（注意！這裡指的是Java裡面定義的數據類型）。除了上述提提供的 function 還有很多其他的，可以根據需要自己摸索。
 ### 3. services
-總算來到我們的業務邏輯層了，這一層好像也被叫做服務層，位於 repository 和 controller 之間，
+總算來到我們的業務邏輯層了，這一層好像也被叫做服務層，位於 repository 和 controller 之間。Controller 調用 Service 層來處理複雜的業務邏輯，而 Service 層通過調用 Repository 層來進行數據庫操作。
+其他層都很簡單就這一層最麻煩，因為這是所有功能真正實現的地方。馬上來看代碼吧：
+~~~ java
+@Service
+public class AuthService {
+    private CustomerRepository customerRepository;
+    @Autowired
+    public AuthService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    public UserDto login(LoginDto data){
+        if (data.getRole().equals("Customer")) {
+            Optional<Customer> customer = customerRepository.findCustomerByEmail(data.getEmail());
+            // 如果該 email 已被註冊過我們對密碼進行匹配
+            if (customer.isPresent()) {
+                // 如果密碼正確，我們返回登入成功的信息給前端
+                if (data.getPassword().equals(customer.get().getPassword())) {
+                    UserDto user = UserDto.builder()
+                            .status("200")
+                            .message("Login Success")
+                            .data(UserData.builder()
+                                    .email(customer.get().getEmail())
+                                    .role(data.getRole())
+                                    .build())
+                            .build();
+                    return user;
+                }
+                // 如果密碼錯誤，我們返回密碼錯誤的信息給前端
+                else {
+                    UserDto user = UserDto.builder()
+                            .status("400")
+                            .message("Wrong Password")
+                            .data(null)
+                            .build();
+                    return user;
+                }
+            }
+            // 如果該用戶不存在，我們返回用戶不存在的信息給前端
+            else {
+                UserDto user = UserDto.builder()
+                        .status("404")
+                        .message("User Not Found")
+                        .data(null)
+                        .build();
+                return user;
+            }
+        }
+        return null;
+    }
+}
+~~~
+這個例子中我們實現了 Customer 登入的功能，可以看到我們在 class 名前也加上了 Annotation，表示這個類是一個 Service 層的類。不用懷疑，不加 Annotation 就是會報錯。你們現在一定很好奇 **LoginDto** 和 **UserDto** 是什麼吧？不用及，現在只要知道是兩個自定義的數據結構就可以了。
 ### 4. controllers
+controller 顧名思義就是控制層啦～呼～快說完了總算可以鬆一口氣。負責處理使用者輸入的請求，協調 View 和 Model 之間的互動。 Controller 從 View 接收使用者的輸入，呼叫 Service 層的業務邏輯，取得資料後再傳遞給 View 進行展示。來看看代碼吧：
+~~~ java
+@RestController
+public class AuthController {
+    // Gson 是用來將數據轉換為 Json 格式的工具
+    private Gson gson = new Gson();
+    private AuthService authService;
+    @Autowired
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
+    // 我們將 login 操作定義為前端的[Get]請求，所以使用 @GetMapping() 註釋
+    @GetMapping("login")
+    public String Login(@RequestBody LoginDto data){
+        UserDto user = authService.login(data);
+        return gson.toJson(user);
+    }
+}
+~~~
+**@GetMapping("login")** 註釋代表的就是當前端發送請求到 "http://localhost:8080/login"
+時會後端會調用這個 Login() 方法。**@RequestBody** 代表前端數據是放在 Body 裡以 Json 的形式傳送給後端的。我們通過 LoginDto 來接收前端發送來的數據並作為查詢的輸入，最終返回登入結果轉成 Json 格式返回給前端。
+
+當然前端傳送數據的方式不只一種，這裡只是舉了一個例子，具體可以參考 https://blog.csdn.net/qq_25305833/article/details/115394226 裡面羅列了一些根據前端傳送數據的方式不同，後端對應的接收方式。
 ### 5. dto
+現在來到了神秘的 dto。dto 是用於在不同層之間傳遞資料的對象。通常用於將資料從 Server 傳輸到客戶端或從客戶端到 Server。它是一個純資料對象，通常不包含任何業務邏輯或複雜行為，只是簡單地封裝資料。它主要作用是為了簡化傳輸的資料結構，將資料庫或業務層的複雜對象轉換為適合傳輸的對象。
+
+在上述的例子中曾出現的 **LoginDto** 和 **UserDto** 一個是客戶端傳送到 Server 的數據結構，另一個是 Server 傳送到客戶端的數據結構。他們兩個的代碼如下：
+~~~ java
+@Data
+@Builder
+public class LoginDto {
+    private String email;
+    private String password;
+    private String role;
+}
+~~~
+~~~ java
+@Data
+@Builder
+public class UserDto {
+    private String status;
+    private String message;
+    private UserData data;
+    
+    class UserData {
+        private String email;
+        private String role;
+    }
+}
+~~~
 
