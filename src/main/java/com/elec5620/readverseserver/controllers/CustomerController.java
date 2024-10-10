@@ -1,24 +1,22 @@
 package com.elec5620.readverseserver.controllers;
 
 import com.elec5620.readverseserver.dto.CustomerDto;
-import com.elec5620.readverseserver.models.Customer;
 import com.elec5620.readverseserver.services.CustomerService;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class CustomerController {
-    private CustomerService service;
     private Gson gson = new Gson();
-
-    public CustomerController(CustomerService service) {
-        this.service = service;
+    private CustomerService customerService;
+    @Autowired
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
     }
-
     @GetMapping("/test")
     public String sayHello(){
         return "hello";
@@ -26,8 +24,7 @@ public class CustomerController {
 
     @GetMapping("customers")
     public String findAllCustomers(){
-        List<CustomerDto> customers = service.findAllCustomer();
-
+        List<CustomerDto> customers = customerService.findAllCustomer();
         return gson.toJson(customers);
     }
 

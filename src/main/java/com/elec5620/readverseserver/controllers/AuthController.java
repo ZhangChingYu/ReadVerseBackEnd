@@ -4,6 +4,7 @@ import com.elec5620.readverseserver.dto.LoginDto;
 import com.elec5620.readverseserver.dto.UserDto;
 import com.elec5620.readverseserver.services.AuthService;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     private Gson gson = new Gson();
     private AuthService authService;
-
+    @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }
