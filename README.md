@@ -68,8 +68,27 @@ public class Customer {
 }
 ~~~
 ### 2. repositories
+在講 repositories 之前我需要先說明一下 Spring Data JPA 的用途，Spring Data JPA 是用來簡化我們的數據庫操作，可以根據方法名自動生成相應的SQL查詢，可以大大減輕我們的開發負擔。
 
+我們說的 repository 其實就是用來封裝數據庫操作的，它只提供訪問數據庫的方法不直接暴露底層的數據庫實現細節，使業務邏輯不需要直接處理數據庫操作，而是通過定義好的接口進行交互。話不多說直接上代碼：
+~~~ java
+@Repository
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
+    // 通過 email 查詢 Customer
+    Customer findCustomerByEmail(String email);
+    // 通過 customer_id 查詢 Customer
+    Customer findCustomerByCustomerId(Long customerId);
+    // 通過 email 和 password 查詢 Customer
+    Customer findCustomersByEmailAndPassword(String email, String password);
+    // 通過 customer_id 更新 Customer
+    Boolean updateCustomerByCustomerId(Customer customer);
+    // 根據 customer_id 刪除 Customer
+    Boolean removeCustomerByCustomerId(Long customerId);
+}
+~~~
+首先要注意，在 repositories 目錄下只能放 interface，並且一定要加上 **@Repository** 的 Annotation 否則後續運行上會報錯。可以看到我們通過 extend 來使用 Spring Data JPA 的接口，其中 JpaRepository<Customer, Long> 中 Customer 是 model 中對應 Table 的 class，而 Long 則是主鍵的數據類型（注意！這裡指的是Java裡面定義的數據類型）。除了上述提提供的 function 還有很多其他的，可以根據需要自己摸索。
 ### 3. services
+總算來到我們的業務邏輯層了，這一層好像也被叫做服務層，位於 repository 和 controller 之間，
 ### 4. controllers
 ### 5. dto
 
