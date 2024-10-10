@@ -68,7 +68,7 @@ public class Customer {
 }
 ~~~
 ### 2. repositories
-在講 repositories 之前我需要先說明一下 Spring Data JPA 的用途，Spring Data JPA 是用來簡化我們的數據庫操作，可以根據方法名自動生成相應的SQL查詢，可以大大減輕我們的開發負擔。
+在講 repositories 之前我需要先說明一下 Spring Data JPA 的用途，Spring Data JPA 是用來簡化我們的數據庫操作，可以根據方法名自動生成相應的SQL查詢，大大減輕我們的開發負擔。
 
 我們說的 repository 其實就是用來封裝數據庫操作的，它只提供訪問數據庫的方法不直接暴露底層的數據庫實現細節，使業務邏輯不需要直接處理數據庫操作，而是通過定義好的接口進行交互。話不多說直接上代碼：
 ~~~ java
