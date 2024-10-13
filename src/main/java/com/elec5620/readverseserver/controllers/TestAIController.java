@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestAIController {
-    private TestAIService aiService;
+    private final TestAIService aiService;
     @Autowired
     public TestAIController(TestAIService aiService) {
         this.aiService = aiService;
@@ -16,7 +16,6 @@ public class TestAIController {
 
     @GetMapping("/chat")
     public String chat(@RequestBody String message){
-        String respond = aiService.chat(message);
-        return respond;
+        return aiService.chat(message);
     }
 }

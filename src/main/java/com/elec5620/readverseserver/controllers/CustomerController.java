@@ -11,8 +11,8 @@ import java.util.List;
 
 @RestController
 public class CustomerController {
-    private Gson gson = new Gson();
-    private CustomerService customerService;
+    private final Gson gson = new Gson();
+    private final CustomerService customerService;
     @Autowired
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;

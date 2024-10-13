@@ -29,7 +29,6 @@ public class TestAIService {
                 .build();
     }
     /**
-    @PostConstruct
     void init(){
         ChatMemory memory = MessageWindowChatMemory.withMaxMessages(10);
         assistant = AiServices.builder(Assistant.class)
