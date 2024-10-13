@@ -16,7 +16,6 @@ public class TestAIController {
 
     @GetMapping("/chat")
     public String chat(@RequestBody String message){
-        System.out.println(message);
         String respond = aiService.chat(message);
         return respond;
     }

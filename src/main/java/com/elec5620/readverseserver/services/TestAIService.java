@@ -7,11 +7,13 @@ import dev.langchain4j.memory.chat.MessageWindowChatMemory;
 import dev.langchain4j.model.openai.OpenAiChatModel;
 import dev.langchain4j.service.AiServices;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class TestAIService {
-    private static String OPENAI_API_KEY = "sk-proj-xjjRA6AssOvFlDsxcYFYT3BlbkFJwCLVduCXdRF9UzrinfrS";
+    @Value("${app.openai.key}")
+    private String OPENAI_API_KEY;
     Assistant assistant;
 
     interface Assistant {
