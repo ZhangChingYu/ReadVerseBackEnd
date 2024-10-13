@@ -22,7 +22,7 @@ public class CustomerController {
         return "hello";
     }
 
-    @GetMapping("customers")
+    @GetMapping("/customers")
     public String findAllCustomers(){
         List<CustomerDto> customers = customerService.findAllCustomer();
         return gson.toJson(customers);
