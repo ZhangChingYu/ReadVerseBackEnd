@@ -1,13 +1,13 @@
 package com.elec5620.readverseserver.controllers;
 
+import com.elec5620.readverseserver.dto.FormalDto;
 import com.elec5620.readverseserver.dto.LoginDto;
 import com.elec5620.readverseserver.dto.UserDto;
+import com.elec5620.readverseserver.models.User;
 import com.elec5620.readverseserver.services.AuthService;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
@@ -22,5 +22,21 @@ public class AuthController {
     public String Login(@RequestBody LoginDto data){
         UserDto user = authService.login(data);
         return gson.toJson(user);
+    }
+
+    @PostMapping("register")
+    public String Register(@RequestBody User user){
+        FormalDto respond = authService.register(user);
+        return gson.toJson(respond);
+    }
+
+    @PutMapping("profile/settings")
+    public String ProfileSetting(@RequestBody User user){
+        return "";
+    }
+
+    @PutMapping("profile/change_password")
+    public String ChangePassword(@RequestBody Long id, String password){
+        return "";
     }
 }
