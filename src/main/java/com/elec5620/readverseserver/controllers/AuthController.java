@@ -2,7 +2,6 @@ package com.elec5620.readverseserver.controllers;
 
 import com.elec5620.readverseserver.dto.FormalDto;
 import com.elec5620.readverseserver.dto.LoginDto;
-import com.elec5620.readverseserver.dto.UserDto;
 import com.elec5620.readverseserver.models.User;
 import com.elec5620.readverseserver.services.AuthService;
 import com.google.gson.Gson;
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class AuthController {
-    private Gson gson = new Gson();
-    private AuthService authService;
+    private final Gson gson = new Gson();
+    private final AuthService authService;
     @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
@@ -20,8 +19,8 @@ public class AuthController {
 
     @GetMapping("login")
     public String Login(@RequestBody LoginDto data){
-        UserDto user = authService.login(data);
-        return gson.toJson(user);
+        FormalDto respond = authService.login(data);
+        return gson.toJson(respond);
     }
 
     @PostMapping("register")
