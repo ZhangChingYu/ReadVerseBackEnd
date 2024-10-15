@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class AuthService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
     @Autowired
     public AuthService(UserRepository userRepository) {
         this.userRepository = userRepository;

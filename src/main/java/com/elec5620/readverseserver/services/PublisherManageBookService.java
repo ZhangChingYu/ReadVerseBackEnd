@@ -14,8 +14,8 @@ import java.util.Optional;
 
 @Service
 public class PublisherManageBookService {
-    private UserRepository userRepository;
-    private BookRepository bookRepository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
     @Autowired
     public PublisherManageBookService(UserRepository userRepository, BookRepository bookRepository) {
         this.userRepository = userRepository;
