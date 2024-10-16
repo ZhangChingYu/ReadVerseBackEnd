@@ -2,14 +2,18 @@ package com.elec5620.readverseserver.services;
 
 import com.elec5620.readverseserver.dto.FormalDto;
 import com.elec5620.readverseserver.dto.PostBookDto;
+import com.elec5620.readverseserver.dto.ProductDto;
 import com.elec5620.readverseserver.models.Book;
 import com.elec5620.readverseserver.models.User;
 import com.elec5620.readverseserver.repositories.BookRepository;
 import com.elec5620.readverseserver.repositories.UserRepository;
 import com.elec5620.readverseserver.utils.FileHandler;
+import nl.siegmann.epublib.domain.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
