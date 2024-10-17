@@ -26,9 +26,12 @@ public class ProductManageController {
     }
 
     @PostMapping("upload_new_ebook")
-    public String uploadEBook(@RequestParam("id") Long id, @RequestParam("author") String author, @RequestParam("price") Double price, @RequestParam("title") String title, @RequestParam("data")MultipartFile file){
+    public ResponseEntity<FormalDto> uploadEBook(@RequestParam("id") Long id, @RequestParam("author") String author, @RequestParam("price") Double price, @RequestParam("title") String title, @RequestParam("data")MultipartFile file){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
         if (file.isEmpty()) {
-            return "Please select a file to upload.";
+            // "Please select a file to upload."
+            return null;
         } else {
             PostBookDto book = PostBookDto.builder()
                     .publisherId(id)
@@ -38,15 +41,17 @@ public class ProductManageController {
                     .file(file)
                     .build();
             FormalDto respond = service.uploadNewBook(book);
-            return gson.toJson(respond);
+            return new ResponseEntity<>(respond, headers, respond.getStatus());
         }
     }
 
     @GetMapping("book_chapters")
-    public String showBookInfo(@RequestBody GetBookDto data){
+    public ResponseEntity<List<ChapterIdDto>> showBookInfo(@RequestBody GetBookDto data){
         Book book = FileHandler.epubFileReader(data.getPublisherId(), data.getBookId());
         List<ChapterIdDto> chapters = FileHandler.getChapters(book);
-        return gson.toJson(chapters);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<>(chapters, headers, 200);
     }
 
     @GetMapping("get_cover_image")

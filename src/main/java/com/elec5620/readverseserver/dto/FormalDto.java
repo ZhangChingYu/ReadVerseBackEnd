@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class FormalDto {
-    private String status;
+    private int status;
     private String message;
     private Object data;
 }

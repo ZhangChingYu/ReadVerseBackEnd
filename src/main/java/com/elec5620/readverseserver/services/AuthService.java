@@ -25,7 +25,7 @@ public class AuthService {
         if (user.isPresent()) {
             // find the user
             if (data.getPassword().equals(user.get().getPassword())) {
-                respond.setStatus("200");
+                respond.setStatus(200);
                 respond.setMessage("Login Success");
                 respond.setData(
                         UserData.builder()
@@ -37,13 +37,13 @@ public class AuthService {
             }
             // wrong password
             else {
-                respond.setStatus("401");
+                respond.setStatus(401);
                 respond.setMessage("Wrong Password");
             }
         }
         // user not found
         else {
-            respond.setStatus("404");
+            respond.setStatus(404);
             respond.setMessage("User Not Found");
         }
         return respond;
@@ -52,33 +52,33 @@ public class AuthService {
     public FormalDto register(User user){
         FormalDto response = FormalDto.builder().build();
         if(user == null){
-            response.setStatus("400");
+            response.setStatus(400);
             response.setMessage("User can not be empty.");
         } else if (user.getRole() == null) {
-            response.setStatus("400");
+            response.setStatus(400);
             response.setMessage("user [role] can not be Null.");
         } else if (user.getPassword() == null) {
-            response.setStatus("400");
+            response.setStatus(400);
             response.setMessage("user [password] can not be Null.");
         } else if (user.getEmail() == null) {
-            response.setStatus("400");
+            response.setStatus(400);
             response.setMessage("user [email] can not be Null.");
         } else {
             // check if the account already exist
             Optional<User> check = userRepository.findUserByEmailAndRole(user.getEmail(), user.getRole());
             if(check.isPresent()){
-                response.setStatus("409");
+                response.setStatus(409);
                 response.setMessage("User already exists.");
             }else{
                 user.setVerified(null);
                 user.setId(null);
                 User result = userRepository.save(user);
                 if(result.getId() != null){
-                    response.setStatus("200");
+                    response.setStatus(200);
                     response.setMessage("User register success.");
                     response.setData(user);
                 } else {
-                    response.setStatus("500");
+                    response.setStatus(500);
                     response.setMessage("Server Error.");
                 }
             }
