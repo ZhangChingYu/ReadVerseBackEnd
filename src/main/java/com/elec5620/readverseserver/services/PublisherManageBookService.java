@@ -2,14 +2,18 @@ package com.elec5620.readverseserver.services;
 
 import com.elec5620.readverseserver.dto.FormalDto;
 import com.elec5620.readverseserver.dto.PostBookDto;
+import com.elec5620.readverseserver.dto.ProductDto;
 import com.elec5620.readverseserver.models.Book;
 import com.elec5620.readverseserver.models.User;
 import com.elec5620.readverseserver.repositories.BookRepository;
 import com.elec5620.readverseserver.repositories.UserRepository;
 import com.elec5620.readverseserver.utils.FileHandler;
+import nl.siegmann.epublib.domain.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -48,24 +52,24 @@ public class PublisherManageBookService {
                         book.setFilePath(filePath);
                         bookRepository.save(book);
                         System.out.println("E-Book Upload Complete.");
-                        result.setStatus("200");
+                        result.setStatus(200);
                         result.setMessage("E-Book Upload Complete");
                         result.setData(book);
                     } else {
-                        result.setStatus("500");
+                        result.setStatus(500);
                         result.setMessage("Failed to save file!");
                         // todo: remove the book data from database.
                     }
                 }else {
-                    result.setStatus("400");
+                    result.setStatus(400);
                     result.setMessage("File format not allowed, only allowed .epub file.");
                 }
             }else {
-                result.setStatus("403");
+                result.setStatus(403);
                 result.setMessage("User don't have the authority to access this function!");
             }
         } else{
-            result.setStatus("404");
+            result.setStatus(404);
             result.setMessage("No such user exists!");
         }
         return result;

@@ -5,8 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FormalDto {
-    private int status;
-    private String message;
-    private Object data;
+public class GetBookDto {
+    private Long publisherId;
+    private Long bookId;
 }

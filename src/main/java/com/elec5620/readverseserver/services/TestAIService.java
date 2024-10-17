@@ -28,15 +28,6 @@ public class TestAIService {
                 .chatMemory(memory)
                 .build();
     }
-    /**
-    void init(){
-        ChatMemory memory = MessageWindowChatMemory.withMaxMessages(10);
-        assistant = AiServices.builder(Assistant.class)
-                .chatLanguageModel(HuggingFaceChatModel.withAccessToken("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"))
-                .chatMemory(memory)
-                .build();
-    }
-    */
     public String chat(String message){
         return assistant.chat(message);
     }
