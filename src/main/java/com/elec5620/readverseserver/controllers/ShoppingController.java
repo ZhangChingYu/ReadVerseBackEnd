@@ -6,6 +6,7 @@ import com.elec5620.readverseserver.services.ShoppingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,14 @@ public class ShoppingController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         FormalDto response = service.addCart(cartItem);
+        return new ResponseEntity<>(response, headers, response.getStatus());
+    }
+
+    @DeleteMapping("delete_cart")
+    public ResponseEntity<FormalDto> removeCartItem(@RequestBody Long cartId){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        FormalDto response = service.removeCart(cartId);
         return new ResponseEntity<>(response, headers, response.getStatus());
     }
 }

@@ -50,7 +50,7 @@ public class ShoppingService {
                                 .customerId(cartItem.getUserId())
                                 .build();
                         Cart check = cartRepository.save(cart);
-                        response.setStatus(200);
+                        response.setStatus(201);
                         response.setMessage("Cart Item Added");
                         response.setData(check);
                     }else {
@@ -62,6 +62,19 @@ public class ShoppingService {
                 response.setStatus(404);
                 response.setMessage("No such user exists!");
             }
+        }
+        return response;
+    }
+
+    public FormalDto removeCart(Long cartId){
+        FormalDto response = FormalDto.builder().build();
+        cartRepository.deleteById(cartId);
+        if (!cartRepository.findCartById(cartId).isPresent()) {
+            response.setStatus(204);
+            response.setMessage("Cart Item Delete Success.");
+        } else {
+            response.setStatus(500);
+            response.setMessage("Server Error, Please Try Again Later...");
         }
         return response;
     }
