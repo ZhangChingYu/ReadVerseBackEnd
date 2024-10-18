@@ -10,6 +10,7 @@ import java.util.Date;
 public class ProductDto {
     private Long id;
     private String title;
+    private Double price;
     private String coverImg;
     private Date uploadDate;
 }
