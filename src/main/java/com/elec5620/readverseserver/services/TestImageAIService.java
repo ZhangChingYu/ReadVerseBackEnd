@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TestImageAIService {
-    private String AZURE_OPENAI_ENDPOINT = "";
-    private String AZURE_OPENAI_DEPLOYMENT_NAME = "";
-    private String AZURE_OPENAI_API_KEY = "";
+    private String AZURE_OPENAI_ENDPOINT = "https://readverse-azure-openai-test-001.openai.azure.com/";
+    private String AZURE_OPENAI_DEPLOYMENT_NAME = "test-azure-openai";
+    private String AZURE_OPENAI_API_KEY = "af5d6d513ceb47e1be1cef6939440d09";
 
     public void generateImage(){
         AzureOpenAiImageModel model = new AzureOpenAiImageModel.Builder()
