@@ -1,6 +1,7 @@
 package com.elec5620.readverseserver.services;
 
 import com.elec5620.readverseserver.dto.AddCartDto;
+import com.elec5620.readverseserver.dto.CartItemDto;
 import com.elec5620.readverseserver.dto.FormalDto;
 import com.elec5620.readverseserver.models.Book;
 import com.elec5620.readverseserver.models.Cart;
@@ -8,9 +9,12 @@ import com.elec5620.readverseserver.models.User;
 import com.elec5620.readverseserver.repositories.BookRepository;
 import com.elec5620.readverseserver.repositories.CartRepository;
 import com.elec5620.readverseserver.repositories.UserRepository;
+import com.elec5620.readverseserver.utils.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -75,6 +79,44 @@ public class ShoppingService {
         } else {
             response.setStatus(500);
             response.setMessage("Server Error, Please Try Again Later...");
+        }
+        return response;
+    }
+
+    public FormalDto getAllCartItems(Long customerId){
+        FormalDto response = FormalDto.builder().build();
+        Optional<User> user = userRepository.findUserById(customerId);
+        if(user.isPresent()){
+            if(user.get().getRole().equals("Customer")){
+                response.setStatus(200);
+                List<Cart> carts = cartRepository.findCartsByCustomerId(customerId);
+                if(carts.isEmpty()){
+                    response.setMessage("Cart is empty.");
+                } else{
+                    List<CartItemDto> cartItems = new ArrayList<>();
+                    for(Cart cart : carts){
+                        Optional<Book> book = bookRepository.findById(cart.getBookId());
+                        if(book.isPresent()){
+                            CartItemDto cartItem = CartItemDto.builder()
+                                    .id(cart.getId())
+                                    .title(book.get().getTitle())
+                                    .price(book.get().getPrice())
+                                    .bookId(cart.getBookId())
+                                    .coverImage(FileHandler.coverImageBase64(book.get().getPublisherId(), book.get().getId()))
+                                    .build();
+                            cartItems.add(cartItem);
+                        }
+                    }
+                    response.setMessage("Cart Items Found.");
+                    response.setData(cartItems);
+                }
+            } else {
+                response.setStatus(403);
+                response.setMessage("User Has no authority accessing this function!");
+            }
+        } else {
+            response.setStatus(400);
+            response.setMessage("No such user exists!");
         }
         return response;
     }
