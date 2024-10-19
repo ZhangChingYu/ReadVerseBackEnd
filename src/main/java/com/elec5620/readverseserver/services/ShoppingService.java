@@ -3,30 +3,35 @@ package com.elec5620.readverseserver.services;
 import com.elec5620.readverseserver.dto.AddCartDto;
 import com.elec5620.readverseserver.dto.CartItemDto;
 import com.elec5620.readverseserver.dto.FormalDto;
+import com.elec5620.readverseserver.dto.PlaceOrderDto;
 import com.elec5620.readverseserver.models.Book;
 import com.elec5620.readverseserver.models.Cart;
+import com.elec5620.readverseserver.models.Order;
 import com.elec5620.readverseserver.models.User;
 import com.elec5620.readverseserver.repositories.BookRepository;
 import com.elec5620.readverseserver.repositories.CartRepository;
+import com.elec5620.readverseserver.repositories.OrderRepository;
 import com.elec5620.readverseserver.repositories.UserRepository;
 import com.elec5620.readverseserver.utils.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 @Service
 public class ShoppingService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final OrderRepository orderRepository;
     @Autowired
-    public ShoppingService(CartRepository cartRepository, UserRepository userRepository, BookRepository bookRepository) {
+    public ShoppingService(CartRepository cartRepository, UserRepository userRepository, BookRepository bookRepository, OrderRepository orderRepository) {
         this.cartRepository = cartRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
+        this.orderRepository = orderRepository;
     }
 
     public FormalDto addCart(AddCartDto cartItem){
@@ -119,5 +124,62 @@ public class ShoppingService {
             response.setMessage("No such user exists!");
         }
         return response;
+    }
+
+    public FormalDto placeOrder(List<PlaceOrderDto> newOrders){
+        FormalDto response = FormalDto.builder().build();
+        if(newOrders == null){
+            response.setStatus(400);
+            response.setMessage("Order cannot be empty or null!");
+        } else if(newOrders.isEmpty()){
+            response.setStatus(400);
+            response.setMessage("Order cannot be empty or null!");
+        } else {
+            List<Order> orders = new ArrayList<>();
+            for(PlaceOrderDto newOrder : newOrders){
+                Optional<Book> book = bookRepository.findById(newOrder.getBookId());
+                if(book.isPresent()){
+                    if(book.get().getStatus()){
+                        Order order = Order.builder()
+                                .bookId(book.get().getId())
+                                .customerId(newOrder.getCustomerId())
+                                .date(new Date())
+                                .price(newOrder.getPrice())
+                                .paymentMethod(newOrder.getPaymentMethod())
+                                .status("Pending")
+                                .orderNumber(generateOrderNumber())
+                                .build();
+                        Order result = orderRepository.save(order);
+                        System.out.println(result);
+                        orders.add(result);
+                    }
+                }
+            }
+            if(orders.size() == 0){
+                response.setStatus(202);
+                response.setMessage("Books are not on shelf right now.");
+            }else {
+                response.setStatus(201);
+                response.setMessage("Order Placed.");
+            }
+            response.setData(orders);
+        }
+        return response;
+    }
+
+    private String generateOrderNumber(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHssSSS");
+        String localDate = LocalDateTime.now().format(formatter);
+        Random random = new Random();
+        int randomNumber = random.nextInt(1000);
+        String randomNumerics;
+        if (randomNumber < 10){
+            randomNumerics = "00"+randomNumber;
+        } else if (randomNumber < 100) {
+            randomNumerics = "0"+randomNumber;
+        } else{
+            randomNumerics = String.valueOf(randomNumber);
+        }
+        return localDate+randomNumerics;
     }
 }
