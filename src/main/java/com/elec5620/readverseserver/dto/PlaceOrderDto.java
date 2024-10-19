@@ -5,8 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CustomerDto {
+public class PlaceOrderDto {
     private Long customerId;
-    private String email;
-    private String password;
+    private Long bookId;
+    private Double price;
+    private String paymentMethod;
 }

@@ -1,12 +1,12 @@
 package com.elec5620.readverseserver.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -16,12 +16,13 @@ import lombok.NoArgsConstructor;
 @Table(name = "Book")
 public class Book {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String author;
     private String summary;
     private Long publisherId;
     private Double price;
-    private String filePath;
     private Boolean status;
+    private Date timestamp;
 }

@@ -1,13 +1,10 @@
 package com.elec5620.readverseserver.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -19,8 +16,13 @@ import java.util.Date;
 @Table(name = "_Order")
 public class Order {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String orderNumber;
     private Long customerId;
+    private Long bookId;
     private Date date;
     private Double price;
+    private String status;
+    private String paymentMethod;
 }
