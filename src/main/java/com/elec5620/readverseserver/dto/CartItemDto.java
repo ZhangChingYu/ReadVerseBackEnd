@@ -3,14 +3,13 @@ package com.elec5620.readverseserver.dto;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 @Builder
-public class ProductDto {
+public class CartItemDto {
     private Long id;
+    private Long bookId;
+    private Long publisherId;
     private String title;
     private Double price;
-    private String coverImg;
-    private Date uploadDate;
+    private String coverImage;
 }

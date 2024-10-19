@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +23,6 @@ public class Book {
     private String summary;
     private Long publisherId;
     private Double price;
-    private String filePath;
     private Boolean status;
+    private Date timestamp;
 }
