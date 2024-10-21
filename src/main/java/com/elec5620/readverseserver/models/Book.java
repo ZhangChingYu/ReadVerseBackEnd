@@ -25,4 +25,7 @@ public class Book {
     private Double price;
     private Boolean status;
     private Date timestamp;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id", referencedColumnName = "id") 
+    private Category category;
 }
