@@ -1,16 +1,15 @@
 package com.elec5620.readverseserver.controllers;
 
-import com.elec5620.readverseserver.services.TestAIService;
-import com.elec5620.readverseserver.services.TestImageAIService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.elec5620.readverseserver.services.TestAIService;
+import com.elec5620.readverseserver.services.TestImageAIService;
 
 @RestController
 public class TestAIController {
@@ -39,16 +38,9 @@ public class TestAIController {
 
     @GetMapping("/characterai")
     public ResponseEntity<String> characterChat(@RequestParam("character") String character, 
-                                                @RequestParam("book") String book) {
-        String respond = aiService.setCharacterRole(character, book);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        return new ResponseEntity<>(respond, headers, 200);      
-    }
-
-    @PostMapping("/characterai/chat")
-    public ResponseEntity<String> characterChat(@RequestBody String message) {
-        String respond = aiService.chat(message);
+                                                @RequestParam("book") String book,
+                                                @RequestParam("message") String message) {
+        String respond = aiService.characterChat(character, book, message);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(respond, headers, 200);      
