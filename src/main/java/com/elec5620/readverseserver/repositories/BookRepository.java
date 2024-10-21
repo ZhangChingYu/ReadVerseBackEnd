@@ -6,11 +6,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
 import com.elec5620.readverseserver.models.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByPublisherId(Long publisherId);
+    Optional<Book> findBookByIdAndPublisherId(Long id, Long publisherId);
     @Query("SELECT b FROM Book b WHERE b.publisherId = :publisherId AND " +
         "(b.title ILIKE CONCAT('%', :keyword, '%') OR b.author ILIKE CONCAT('%', :keyword, '%'))")
     List<Book> findBooksByPublisherIdAndKeyword(Long publisherId, String keyword);

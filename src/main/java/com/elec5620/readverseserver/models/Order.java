@@ -18,7 +18,11 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String orderNumber;
     private Long customerId;
+    private Long bookId;
     private Date date;
     private Double price;
+    private String status;
+    private String paymentMethod;
 }

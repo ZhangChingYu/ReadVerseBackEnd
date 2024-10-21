@@ -5,7 +5,9 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GetBookDto {
-    private Long publisherId;
+public class PlaceOrderDto {
+    private Long customerId;
     private Long bookId;
+    private Double price;
+    private String paymentMethod;
 }

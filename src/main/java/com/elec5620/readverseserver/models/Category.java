@@ -16,6 +16,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    // set unique constraint on 'name'.
+    @Column(unique = true)
     private String name;
     private Long parent;
 }
