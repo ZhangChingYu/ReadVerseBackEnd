@@ -1,4 +1,5 @@
-insert into category (name, parent)
+-- Active: 1729487978852@@127.0.0.1@5432@readverse
+insert into category (id, name, parent)
 values (1, 'Arts & Photography', null),
        (2, 'Biographies & Memoirs', null),
        (3, 'Business & Money', null),
