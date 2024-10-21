@@ -13,25 +13,25 @@ import org.springframework.web.multipart.MultipartFile;
 import com.elec5620.readverseserver.dto.BookDto;
 import com.elec5620.readverseserver.dto.FormalDto;
 import com.elec5620.readverseserver.dto.PostBookDto;
-import com.elec5620.readverseserver.services.BookService;
+import com.elec5620.readverseserver.services.ProductService;
 
 @RestController
-public class BookController {
-    private final BookService bookService;
+public class ProductController {
+    private final ProductService productService;
 
-    public BookController(BookService bookService) {
-        this.bookService = bookService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
-    @GetMapping("/books")
+    @GetMapping("/products")
     public ResponseEntity<FormalDto> getBooks(@RequestParam("publisherId") Long publisherId) {
-        FormalDto respond = bookService.getBooks(publisherId);
+        FormalDto respond = productService.getProduct(publisherId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(respond, headers, respond.getStatus());
     }
 
-    @PostMapping("/books/new")
+    @PostMapping("/products/add")
     public ResponseEntity<FormalDto> addBook(
             @RequestParam("publisherId") Long publisherId, 
             @RequestParam("author") String author, 
@@ -47,13 +47,13 @@ public class BookController {
             .file(file)
             .build();
 
-        FormalDto respond = bookService.addBook(book);
+        FormalDto respond = productService.addProduct(book);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(respond, headers, respond.getStatus());
     }
 
-    @PutMapping("/books/edit")
+    @PutMapping("/products/edit")
     public ResponseEntity<FormalDto> editBook(
             @RequestParam("bookId") Long bookId,
             @RequestParam("publisherId") Long publisherId, 
@@ -71,35 +71,30 @@ public class BookController {
             .file(file)
             .build();
 
-        FormalDto respond = bookService.editBook(book);
+        FormalDto respond = productService.editProduct(book);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(respond, headers, respond.getStatus());
     }
-   
-    @DeleteMapping("/books/delete")
+
+    @DeleteMapping("/products/delete")
     public ResponseEntity<FormalDto> deleteBook(@RequestParam("bookId") Long bookId, 
                                                 @RequestParam("publisherId") Long publisherId){
         
-        FormalDto respond = bookService.deleteBook(bookId, publisherId);
+        FormalDto respond = productService.deleteProduct(bookId, publisherId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(respond, headers, respond.getStatus());
     }
 
-    @GetMapping("/books/search")
+    @GetMapping("/products/search")
     public ResponseEntity<FormalDto> searchBook(@RequestParam("publisherId") Long publisherId, 
                                                 @RequestParam("keyword") String keyword) {
-        FormalDto respond = bookService.searchBook(publisherId, keyword);
+        FormalDto respond = productService.searchProduct(publisherId, keyword);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         return new ResponseEntity<>(respond, headers, respond.getStatus());
     }
 
-    /*
-    @PostMapping("/test")
-    public ResponseEntity<String> testEndpoint() {
-        return ResponseEntity.ok("Controller is working");
-    }
-    */
+
 }

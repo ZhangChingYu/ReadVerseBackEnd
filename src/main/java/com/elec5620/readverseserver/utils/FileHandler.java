@@ -1,11 +1,6 @@
 package com.elec5620.readverseserver.utils;
 
 
-import com.elec5620.readverseserver.dto.ChapterIdDto;
-import nl.siegmann.epublib.domain.*;
-import nl.siegmann.epublib.epub.EpubReader;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -13,7 +8,19 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.elec5620.readverseserver.dto.ChapterIdDto;
+
+import nl.siegmann.epublib.domain.Book;
+import nl.siegmann.epublib.domain.Resource;
+import nl.siegmann.epublib.domain.TOCReference;
+import nl.siegmann.epublib.epub.EpubReader;
 
 public class FileHandler {
     // This function will automatically create a new empty file called "ebook" in your computer right next to ReadVerseServer file.
@@ -76,20 +83,27 @@ public class FileHandler {
     }
 
 
-    public static boolean deleteFile(String filePath) {
+    public static boolean deleteFile(Long publisherId, Long bookId) {
+        String rootPath = System.getProperty("user.dir");
+        File rootFile = new File(rootPath);
+        String parentDir = rootFile.getParent();
+        String targetPath = parentDir + "/ebooks/" + publisherId + "/" + bookId + ".epub";
+
         try {
-            Path path = Paths.get(filePath);
-            if (Files.exists(path)) { 
-                Files.delete(path);  
+            Path path = Paths.get(targetPath);
+            System.out.println("Attempting to delete file at: " + path.toAbsolutePath()); // 确保路径正确
+            if (Files.exists(path)) {
+                Files.delete(path);
+                System.out.println("File deleted successfully.");
                 return true;
             } else {
-                System.out.println("File not found: " + filePath);
+                System.out.println("File not found: " + path.toAbsolutePath());
                 return false;
             }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
-        } 
+        }
     }
   
     private static Book epubFileReader(Long publisherId, Long bookId){
