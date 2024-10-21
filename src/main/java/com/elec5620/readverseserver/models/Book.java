@@ -20,7 +20,7 @@ public class Book {
     private Long id;
     private String title;
     private String author;
-    private String summary;
+    private String filePath;
     private Long publisherId;
     private Double price;
     private Boolean status;

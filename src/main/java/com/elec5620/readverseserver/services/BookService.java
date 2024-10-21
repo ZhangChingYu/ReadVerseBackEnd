@@ -31,9 +31,9 @@ public class BookService {
     // tested:
     // 1. user not found
     // 2. user is not a publisher 
-    public FormalDto checkUser(Long id) {
+    public FormalDto checkPublisher(Long publisherId) {
         FormalDto result = FormalDto.builder().build();
-        Optional<User> user = userRepository.findById(id);
+        Optional<User> user = userRepository.findById(publisherId);
 
         if (user.isEmpty()) {
             result.setStatus(404);
@@ -60,7 +60,7 @@ public class BookService {
     // 1. publisher has no book
     // 2. publisher has book(s)
     public FormalDto getBooks(Long publisherId) {
-        FormalDto result = checkUser(publisherId);
+        FormalDto result = checkPublisher(publisherId);
         if (result != null) return result;
 
         List<Book> books = bookRepository.findBooksByPublisherId(publisherId);
@@ -80,7 +80,7 @@ public class BookService {
     // 2. user is deleteing someone else's book
     // 3. book found and deleted
     public FormalDto deleteBook(Long bookId, Long publisherId) {
-        FormalDto result = checkUser(publisherId);
+        FormalDto result = checkPublisher(publisherId);
         if (result != null) return result;
 
         Optional<Book> book = bookRepository.findById(bookId);
@@ -108,7 +108,7 @@ public class BookService {
     // 2. has matching
     // 3. keyword is null, return all books
     public FormalDto searchBook(Long publisherId, String keyword) {
-        FormalDto result = checkUser(publisherId);
+        FormalDto result = checkPublisher(publisherId);
         if (result != null) return result;
 
         result = FormalDto.builder().status(200).build();
