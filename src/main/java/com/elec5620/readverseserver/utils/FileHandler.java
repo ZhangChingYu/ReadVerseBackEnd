@@ -75,6 +75,23 @@ public class FileHandler {
         }
     }
 
+
+    public static boolean deleteFile(String filePath) {
+        try {
+            Path path = Paths.get(filePath);
+            if (Files.exists(path)) { 
+                Files.delete(path);  
+                return true;
+            } else {
+                System.out.println("File not found: " + filePath);
+                return false;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } 
+    }
+  
     private static Book epubFileReader(Long publisherId, Long bookId){
         String rootPath = System.getProperty("user.dir");
         File rootFile = new File(rootPath);
