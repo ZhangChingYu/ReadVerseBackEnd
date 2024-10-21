@@ -12,7 +12,6 @@ import com.elec5620.readverseserver.models.Book;
 public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> findBooksByPublisherId(Long publisherId);
     @Query("SELECT b FROM Book b WHERE b.publisherId = :publisherId AND " +
-        "(b.title ILIKE CONCAT('%', :keyword, '%') OR " +
-        "b.author ILIKE CONCAT('%', :keyword, '%')")
+        "(b.title ILIKE CONCAT('%', :keyword, '%') OR b.author ILIKE CONCAT('%', :keyword, '%'))")
     List<Book> findBooksByPublisherIdAndKeyword(Long publisherId, String keyword);
 }
