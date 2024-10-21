@@ -1,8 +1,9 @@
 package com.elec5620.readverseserver;
 
-import com.elec5620.readverseserver.utils.FileHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.elec5620.readverseserver.utils.FileHandler;
 
 @SpringBootApplication
 public class ReadVerseServerApplication {
