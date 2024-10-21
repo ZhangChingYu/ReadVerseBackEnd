@@ -24,7 +24,7 @@ public class ProductController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<FormalDto> getBooks(@RequestParam("publisherId") Long publisherId) {
+    public ResponseEntity<FormalDto> getProduct(@RequestParam("publisherId") Long publisherId) {
         FormalDto respond = productService.getProduct(publisherId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -32,7 +32,7 @@ public class ProductController {
     }
 
     @PostMapping("/products/add")
-    public ResponseEntity<FormalDto> addBook(
+    public ResponseEntity<FormalDto> addProduct(
             @RequestParam("publisherId") Long publisherId, 
             @RequestParam("author") String author, 
             @RequestParam("price") Double price, 
@@ -54,7 +54,7 @@ public class ProductController {
     }
 
     @PutMapping("/products/edit")
-    public ResponseEntity<FormalDto> editBook(
+    public ResponseEntity<FormalDto> editProduct(
             @RequestParam("bookId") Long bookId,
             @RequestParam("publisherId") Long publisherId, 
             @RequestParam("author") String author, 
@@ -78,7 +78,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/products/delete")
-    public ResponseEntity<FormalDto> deleteBook(@RequestParam("bookId") Long bookId, 
+    public ResponseEntity<FormalDto> deleteProduct(@RequestParam("bookId") Long bookId, 
                                                 @RequestParam("publisherId") Long publisherId){
         
         FormalDto respond = productService.deleteProduct(bookId, publisherId);
@@ -88,7 +88,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/search")
-    public ResponseEntity<FormalDto> searchBook(@RequestParam("publisherId") Long publisherId, 
+    public ResponseEntity<FormalDto> searchProduct(@RequestParam("publisherId") Long publisherId, 
                                                 @RequestParam("keyword") String keyword) {
         FormalDto respond = productService.searchProduct(publisherId, keyword);
         HttpHeaders headers = new HttpHeaders();

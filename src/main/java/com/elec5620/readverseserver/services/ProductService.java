@@ -39,7 +39,7 @@ public class ProductService {
             result.setMessage("User not found");
             return result;
         }
-    if (!user.get().getRole().equals("P")) {
+        if (!user.get().getRole().equals("P")) {
             result.setStatus(403);
             result.setMessage("User not allowed");
             return result;
@@ -74,7 +74,7 @@ public class ProductService {
         return result;
     }
 
-        public FormalDto addProduct(PostBookDto bookDto) {
+    public FormalDto addProduct(PostBookDto bookDto) {
         FormalDto result = FormalDto.builder().build();
 
         if (!checkFileType(bookDto.getFile())) {
